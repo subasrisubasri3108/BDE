@@ -1,4 +1,4 @@
-# Experiment 1 — Word Count using MapReduce
+# Experiment 2 — Weather Data Analysis using MapReduce
 
 ## 1. Start Hadoop
 
@@ -18,25 +18,28 @@ NodeManager
 
 ## 2. Create the Java Program
 
-Create `WordCount.java` and enter the Word Count program.
+Create `WeatherAnalysis.java` and enter the Weather Analysis program.
 
-Create the input folder and `file.txt`:
+Create the input folder and file:
 
 ```cmd
 mkdir input
-notepad input\file.txt
+notepad input\weather.txt
 ```
 
-Enter some text, for example:
+Enter the sample weather data:
 
 ```text
-hello world hello hadoop mapreduce hadoop world
+202001011234567891020
+202001021234567891015
+202101011234567891030
+202101021234567891027
 ```
 
 ## 3. Compile the Program
 
 ```cmd
-javac -classpath "%HADOOP_HOME%\share\hadoop\common\*;%HADOOP_HOME%\share\hadoop\common\lib\*;%HADOOP_HOME%\share\hadoop\hdfs\*;%HADOOP_HOME%\share\hadoop\mapreduce\*;%HADOOP_HOME%\share\hadoop\mapreduce\lib\*" WordCount.java
+javac -classpath "%HADOOP_HOME%\share\hadoop\common\*;%HADOOP_HOME%\share\hadoop\common\lib\*;%HADOOP_HOME%\share\hadoop\hdfs\*;%HADOOP_HOME%\share\hadoop\mapreduce\*;%HADOOP_HOME%\share\hadoop\mapreduce\lib\*" WeatherAnalysis.java
 ```
 
 Compiles the Java program into `.class` files.
@@ -44,7 +47,7 @@ Compiles the Java program into `.class` files.
 ## 4. Create the JAR
 
 ```cmd
-jar -cvf wordcount.jar *.class
+jar -cvf weatheranalysis.jar *.class
 ```
 
 Packages the compiled files into a JAR file for Hadoop.
@@ -52,41 +55,39 @@ Packages the compiled files into a JAR file for Hadoop.
 ## 5. Upload Input to HDFS
 
 ```cmd
-hdfs dfs -mkdir /wordinput
-hdfs dfs -put "FULL_PATH_TO_Exp1\input\file.txt" /wordinput
+hdfs dfs -mkdir /weatherinput
+hdfs dfs -put "FULL_PATH_TO_Exp2\input\weather.txt" /weatherinput
 ```
 
-Copies the input file from Windows to HDFS.
+Copies the weather data from Windows to HDFS.
 
 ## 6. Run MapReduce
 
 ```cmd
-hadoop jar wordcount.jar WordCount /wordinput /wordoutput
+hadoop jar weatheranalysis.jar WeatherAnalysis /weatherinput /weatheroutput
 ```
 
-Runs the Word Count MapReduce program.
+Finds the maximum temperature for each year.
 
 ## 7. Display Output
 
 ```cmd
-hdfs dfs -cat /wordoutput/part-r-00000
+hdfs dfs -cat /weatheroutput/*
 ```
 
-Displays the word counts produced by the Reducer.
+Displays the result produced by the Reducer.
 
-**Expected format:**
+**Expected output for the sample data:**
 ```text
-hadoop 2
-hello 2
-mapreduce 1
-world 2
+2020    7891
+2021    7891
 ```
 
 ### If Running Again
 
 ```cmd
-hdfs dfs -rm -r /wordinput
-hdfs dfs -rm -r /wordoutput
+hdfs dfs -rm -r /weatherinput
+hdfs dfs -rm -r /weatheroutput
 ```
 
 Then repeat the HDFS upload and MapReduce steps.
